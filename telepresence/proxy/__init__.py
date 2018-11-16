@@ -28,14 +28,6 @@ def setup(runner: Runner, args):
     Determine how the user wants to set up the proxy in the cluster.
     """
     deployment_type = "deployment"
-    if runner.kubectl.command == "oc":
-        # OpenShift Origin uses DeploymentConfig instead, but for swapping we
-        # mess with ReplicationController instead because mutating DC doesn't
-        # work:
-        if args.swap_deployment:
-            deployment_type = "rc"
-        else:
-            deployment_type = "deploymentconfig"
 
     # Figure out if we need capability that allows for ports < 1024:
     image_name = TELEPRESENCE_REMOTE_IMAGE
@@ -60,10 +52,7 @@ def setup(runner: Runner, args):
     if args.swap_deployment is not None:
         # This implies --swap-deployment
         deployment_arg = args.swap_deployment
-        if runner.kubectl.command == "oc":
-            operation = swap_deployment_openshift
-        else:
-            operation = supplant_deployment
+        operation = supplant_deployment
         args.operation = "swap_deployment"
 
     # minikube/minishift break DNS because DNS gets captured, sent to minikube,
