@@ -61,6 +61,7 @@ def create_new_deployment(
         "--restart=Always",
         "--limits=cpu=100m,memory=256Mi",
         "--requests=cpu=25m,memory=64Mi",
+        "--generator=deployment/v1beta1",
         deployment_arg,
         "--image=" + image_name,
         "--labels=telepresence=" + run_id,
